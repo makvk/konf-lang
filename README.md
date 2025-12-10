@@ -12,7 +12,7 @@
 ### Установка
 ```bash
     # Клонируйте репозиторий
-    git clone <repo-name>
+    git clone https://github.com/makvk/konf-lang
     cd konf-lang
 
     # Создайте виртуальное окружение (опционально)
