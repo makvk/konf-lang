@@ -1,0 +1,11 @@
+let max_players = 4
+let levels = list("forest", "castle", "caves")
+let difficulty_multiplier = 1.5
+
+dict(
+    game_title = "Dragon Quest",
+    players = !{max_players},
+    sorted_levels = !{sort(levels)},
+    difficulty = !{max_players + difficulty_multiplier},
+    features = list("multiplayer", "achievements", "cloud_saves")
+)
