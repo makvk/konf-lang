@@ -160,7 +160,7 @@ class Parser:
             return FunctionCall('sort', [arg])
         
         return self.parse_factor()
-    
+
     def parse_factor(self) -> Any:
         """Парсит фактор (числа, строки, переменные, массивы, словари, скобки)."""
         self.skip_whitespace()
@@ -179,7 +179,7 @@ class Parser:
         elif self.match('list('):
             return self.parse_array()
         
-        elif self.match('dict('):
+        elif self.match('$['):  
             return self.parse_dict()
         
         elif self.peek() == '(':
@@ -229,31 +229,26 @@ class Parser:
         return Array(elements)
     
     def parse_dict(self) -> Dictionary:
-        """Парсит словарь: dict(ключ = значение, ключ2 = значение2, ...)"""
-        # Уже пропустили 'dict('
+        """Парсит словарь: $[имя: значение, имя: значение, ...]"""
         self.skip_whitespace()
-        
         pairs = {}
         
         # Если сразу закрывающая скобка
-        if self.peek() == ')':
-            self.advance()  # ')'
+        if self.peek() == ']':
+            self.advance()  # ']'
             return Dictionary(pairs)
         
         # Парсим пары ключ-значение
         while True:
-            # Парсим ключ
             key_node = self.parse_identifier()
             key = key_node.name
+            
+            if self.peek() != ':':
+                raise SyntaxError(f"Ожидалось ':' после ключа '{key}' в словаре, получено: '{self.peek()}'")
+            
+            self.advance()  # ':'
             self.skip_whitespace()
             
-            # Ожидаем '='
-            if not self.match('='):
-                raise SyntaxError(f"Ожидалось '=' после ключа '{key}' в словаре")
-            
-            self.skip_whitespace()
-            
-            # Парсим значение
             value = self.parse_expression()
             pairs[key] = value
             
@@ -263,11 +258,11 @@ class Parser:
             if self.peek() == ',':
                 self.advance()
                 self.skip_whitespace()
-            elif self.peek() == ')':
-                self.advance()  # ')'
+            elif self.peek() == ']':
+                self.advance()  # ']'
                 break
             else:
-                raise SyntaxError(f"Ожидалась ',' или ')' в словаре, получено: '{self.peek()}'")
+                raise SyntaxError(f"Ожидалась ',' или ']' в словаре, получено: '{self.peek()}'")
         
         return Dictionary(pairs)
     
@@ -353,7 +348,8 @@ class Parser:
             self.pos += 1
         
         name = self.text[start:self.pos]
-        self.skip_whitespace()
+        
+        self.skip_whitespace() 
         
         return Variable(name)
     

@@ -1,16 +1,11 @@
-let node_version = 18
-let test_workers = 4
-let environments = list("dev", "staging", "production")
+let node_versions = list(16, 18, 20)
 
-dict(
-    pipeline = "deployment",
-    node_version = !{node_version},
-    test_workers = !{test_workers},
-    parallel_tests = !{test_workers > 1},
-    stages = list("lint", "test", "build", "deploy"),
-    environments = !{sort(environments)},
-    notifications = dict(
-        email = "team@example.com",
-        slack = "#ci-cd"
-    )
-)
+$[
+    pipeline: "deployment",
+    versions: !{sort(node_versions)},
+    stages: $[
+        build: 0,
+        test: 1,
+        deploy: 1
+    ]
+]

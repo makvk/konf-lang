@@ -1,0 +1,15 @@
+features = [
+    "gzip",
+    "ssl",
+    "cache",
+]
+sorted_features = [
+    "cache",
+    "gzip",
+    "ssl",
+]
+
+[server]
+name = "nginx"
+port = 8080
+timeout = 30

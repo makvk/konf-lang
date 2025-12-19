@@ -1,16 +1,12 @@
-let default_port = 8080
-let ssl_port = 8443
-let hosts = list("example.com", "api.example.com", "static.example.com")
+let base_port = 8080
+let timeout = 30
 
-dict(
-    server = dict(
-        port = !{default_port},
-        ssl_port = !{ssl_port},
-        timeout = 30
-    ),
-    hosts = !{sort(hosts)},
-    logging = dict(
-        level = "info",
-        format = "json"
-    )
-)
+$[
+    server: $[
+        name: "nginx",
+        port: !{base_port},
+        timeout: !{timeout}
+    ],
+    features: list("gzip", "ssl", "cache"),
+    sorted_features: !{sort(list("cache", "ssl", "gzip"))}
+]

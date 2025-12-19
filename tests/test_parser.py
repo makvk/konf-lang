@@ -38,8 +38,23 @@ def test_sort():
     assert result == [1, 2, 3]
 
 def test_dict():
-    parser = Parser('dict(name = "test", value = 42)')
+    """Тест парсинга словарей с правильным синтаксисом $[...]."""
+    parser = Parser('$[name: "test", value: 42]')
     ast = parser.parse()
     evaluator = Evaluator()
     result = evaluator.evaluate(ast)
-    assert result == {'name': 'test', 'value': 42}
+    assert result == {"name": "test", "value": 42}
+    
+    # Пустой словарь
+    parser = Parser("$[]")
+    ast = parser.parse()
+    evaluator = Evaluator()
+    result = evaluator.evaluate(ast)
+    assert result == {}
+    
+    # Словарь с вложенными значениями
+    parser = Parser('$[arr: list(1, 2), nested: $[a: 1]]')
+    ast = parser.parse()
+    evaluator = Evaluator()
+    result = evaluator.evaluate(ast)
+    assert result == {"arr": [1, 2], "nested": {"a": 1}}

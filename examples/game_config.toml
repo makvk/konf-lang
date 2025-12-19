@@ -1,0 +1,8 @@
+title = "Dragon Quest"
+players = 4
+sorted_difficulties = [
+    "easy",
+    "hard",
+    "normal",
+]
+max_score = 1004

@@ -1,11 +1,9 @@
 let max_players = 4
-let levels = list("forest", "castle", "caves")
-let difficulty_multiplier = 1.5
+let difficulty_levels = list("easy", "normal", "hard")
 
-dict(
-    game_title = "Dragon Quest",
-    players = !{max_players},
-    sorted_levels = !{sort(levels)},
-    difficulty = !{max_players + difficulty_multiplier},
-    features = list("multiplayer", "achievements", "cloud_saves")
-)
+$[
+    title: "Dragon Quest",
+    players: !{max_players},
+    sorted_difficulties: !{sort(difficulty_levels)},
+    max_score: !{max_players + 1000}
+]
